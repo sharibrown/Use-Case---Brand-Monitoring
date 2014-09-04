@@ -9,7 +9,7 @@ foreign data wrapper installed
 staging tables where the data lands:
 
 json_tmp (foreign table)
-explore (staging table)
+explore_set (staging table)
 
 tables that tableau will use:
 
@@ -318,8 +318,8 @@ OPTIONS (filename '/tmp/Taco.json');
 
 /*create the physical table*/
 
-DROP TABLE IF EXISTS explore;
-CREATE TABLE explore
+DROP TABLE IF EXISTS explore_set;
+CREATE TABLE explore_set
 (	
 "demographic.gender" TEXT,
 "facebook.application" TEXT,
@@ -600,7 +600,7 @@ CREATE TABLE explore
 )
 ;
 
-INSERT INTO explore
+INSERT INTO explore_set
 select * from json_tmp;
 
 
@@ -825,7 +825,7 @@ SELECT
 case when "a"."interaction.tag_tree.BRAND" is NULL then ''
 else unnest("a"."interaction.tag_tree.BRAND")
 end as "interaction.tag_tree.BRAND"
-from explore a
+from explore_set a
 where cast("a"."interaction.tag_tree.BRAND" as text) is NOT NULL
 ;
 
@@ -1266,7 +1266,7 @@ from   (SELECT
 	CASE WHEN "interaction.mentions" is NULL then ''
 	ELSE unnest("interaction.mentions")
 	END AS "interaction.mentions"
-	from explore
+	from explore_set
 	where cast("interaction.mentions" as text) is NOT NULL
 ) a
 ;
@@ -1706,7 +1706,7 @@ from   (SELECT
 	CASE WHEN "interaction.hashtags" is NULL then ''
 	ELSE unnest("interaction.hashtags")
 	END AS "interaction.hashtags"
-	from explore
+	from explore_set
 	where cast("interaction.hashtags" as text) is NOT NULL
 ) a
 ;
@@ -2148,7 +2148,8 @@ from
 	CASE WHEN "links.url" is NULL then ''
 	ELSE unnest("links.url")
 	END AS "links.url"
-	from explore
+	from explore_set
 	where cast("links.url" as text) is NOT NULL
 ) a
 ;
+
